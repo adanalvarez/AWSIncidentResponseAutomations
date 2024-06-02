@@ -71,7 +71,7 @@ Example:
 ```json
 {
   "user_name": "TestUser",
-  "block": "true"
+  "block": true
 }
 ```
 
