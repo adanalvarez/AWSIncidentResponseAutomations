@@ -25,7 +25,10 @@ module "lambda_function" {
                 "sso:ListAccountsForProvisionedPermissionSet",
                 "sso:ProvisionPermissionSet",
                 "sso:DescribePermissionSetProvisioningStatus",
-                "identitystore:ListUsers"
+                "identitystore:ListUsers",
+                "iam:GetRole",
+                "iam:ListAttachedRolePolicies",
+                "iam:PutRolePolicy"
             ],
             "Resource": "*"
         }
