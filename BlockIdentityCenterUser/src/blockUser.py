@@ -59,7 +59,7 @@ def provision_permission_set(instance_arn, permission_set_arn, account_id):
         wait_for_provisioning(instance_arn, request_id)
         print(f"Provisioned permission set to account {account_id}")
     except Exception as e:
-        print(f"An error occurred when provisioning the permission set: {e}")
+        print(f"An error occurred when provisioning {permission_set_arn} in {account_id}: {e}")
 
 def wait_for_provisioning(instance_arn, request_id):
     """Wait for the provisioning to complete."""
