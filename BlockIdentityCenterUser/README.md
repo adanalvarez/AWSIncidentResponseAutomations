@@ -48,6 +48,9 @@ The provided Terraform will deploy a lambda and create a role with the following
 "sso:ProvisionPermissionSet",
 "sso:DescribePermissionSetProvisioningStatus",
 "identitystore:ListUsers"
+"iam:GetRole",
+"iam:ListAttachedRolePolicies",
+"iam:PutRolePolicy"
 ```
 
 Before deploying, make sure to configure the `shared.auto.tfvars.json` that needs:
