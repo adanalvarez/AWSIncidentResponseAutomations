@@ -1,0 +1,60 @@
+{
+    "steps": [
+        {
+            "actionId": "com.datadoghq.aws.lambda.invoke_lambda",
+            "connectionLabel": "",
+            "display": {
+                "bounds": {
+                    "y": 182.98753356933594
+                }
+            },
+            "name": "Invoke_lambda_function",
+            "parameters": [
+                {
+                    "name": "region",
+                    "value": "CHANGE_REGION"
+                },
+                {
+                    "name": "functionName",
+                    "value": "BlockIdentityCenterUser"
+                },
+                {
+                    "name": "invocationType",
+                    "value": "Event"
+                },
+                {
+                    "name": "inputPayload",
+                    "value": {
+                        "block": "{{ Trigger.block }}",
+                        "user_name": "{{ Trigger.username }}"
+                    }
+                }
+            ]
+        }
+    ],
+    "inputSchema": {
+        "parameters": [
+            {
+                "label": "SSO Username",
+                "name": "username",
+                "type": "STRING"
+            },
+            {
+                "defaultValue": true,
+                "description": "Block or unblock a user",
+                "label": "Block User",
+                "name": "block",
+                "type": "BOOLEAN"
+            }
+        ]
+    },
+    "outputSchema": {},
+    "triggers": [
+        {
+            "manualTrigger": {},
+            "startStepNames": [
+                "Invoke_lambda_function"
+            ]
+        }
+    ]
+}

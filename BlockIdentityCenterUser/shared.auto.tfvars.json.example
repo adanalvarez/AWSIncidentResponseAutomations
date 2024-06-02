@@ -1,0 +1,6 @@
+{
+    "identity_store_id": "d-xxxxxxxxxx",
+    "region": "us-east-2",
+    "enable_datadog_role": true,
+    "datadog_external_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+}
