@@ -22,6 +22,9 @@ module "lambda_function" {
                 "sso:GetInlinePolicyForPermissionSet",
                 "sso:PutInlinePolicyToPermissionSet",
                 "sso:DeleteInlinePolicyFromPermissionSet",
+                "sso:ListAccountsForProvisionedPermissionSet",
+                "sso:ProvisionPermissionSet",
+                "sso:DescribePermissionSetProvisioningStatus",
                 "identitystore:ListUsers"
             ],
             "Resource": "*"

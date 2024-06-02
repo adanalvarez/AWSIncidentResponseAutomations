@@ -1,6 +1,7 @@
 import boto3
 import json
 import os
+import time
 from datetime import datetime, timezone
 
 identity_store_client = boto3.client('identitystore')
@@ -32,6 +33,47 @@ def get_user_id(username, identity_store_id):
     if not users:
         raise ValueError("User not found")
     return users[0]['UserId']
+
+def list_accounts_for_provisioned_permission_set(instance_arn, permission_set_arn):
+    """List all accounts for a provisioned permission set."""
+    accounts = []
+    paginator = sso_admin_client.get_paginator('list_accounts_for_provisioned_permission_set')
+    page_iterator = paginator.paginate(
+        InstanceArn=instance_arn,
+        PermissionSetArn=permission_set_arn
+    )
+    for page in page_iterator:
+        accounts.extend(page['AccountIds'])
+    return accounts
+
+def provision_permission_set(instance_arn, permission_set_arn, account_id):
+    """Provision a permission set to an account."""
+    try:
+        response = sso_admin_client.provision_permission_set(
+            InstanceArn=instance_arn,
+            PermissionSetArn=permission_set_arn,
+            TargetId=account_id,
+            TargetType='AWS_ACCOUNT'
+        )
+        request_id = response['PermissionSetProvisioningStatus']['RequestId']
+        wait_for_provisioning(instance_arn, request_id)
+        print(f"Provisioned permission set to account {account_id}")
+    except Exception as e:
+        print(f"An error occurred when provisioning the permission set: {e}")
+
+def wait_for_provisioning(instance_arn, request_id):
+    """Wait for the provisioning to complete."""
+    status = 'IN_PROGRESS'
+    while status == 'IN_PROGRESS':
+        time.sleep(5)  # Poll every 5 seconds
+        response = sso_admin_client.describe_permission_set_provisioning_status(
+            InstanceArn=instance_arn,
+            ProvisionPermissionSetRequestId=request_id
+        )
+        status = response['PermissionSetProvisioningStatus']['Status']
+        if status == 'FAILED':
+            raise Exception(f"Provisioning failed: {response['PermissionSetProvisioningStatus']['FailureReason']}")
+    print("Provisioning completed.")
 
 def update_permission_sets(user_id, user_name, instance_arn, action):
     """Update all Permission Sets by either blocking or unblocking a user."""
@@ -95,6 +137,10 @@ def update_permission_sets(user_id, user_name, instance_arn, action):
                 )
             except Exception as e:
                 print(f"An error occurred when adding the inline policy: {e}")
+        # Provision the permission set to all relevant accounts
+        account_ids = list_accounts_for_provisioned_permission_set(instance_arn, permission_set)
+        for account_id in account_ids:
+            provision_permission_set(instance_arn, permission_set, account_id)
 
 def lambda_handler(event, context):
     identity_store_id = os.environ.get("IDENTITY_STORE_ID")
