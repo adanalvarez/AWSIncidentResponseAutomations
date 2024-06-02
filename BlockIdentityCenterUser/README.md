@@ -78,4 +78,3 @@ Example:
 2. Copy the External ID and configure it in the `shared.auto.tfvars.json`, also set the `enable_datadog_role` to true.
 3. This should create a connection that will allow invoking the lambda from Datadog.
 4. Once this is done, create a new workflow, then click `Edit JSON Spec`, copy the JSON. Then click the Invoke Lambda function action and edit the region value to the region where the Terraform has been deployed, and make sure you configure the Connection to the one configured previously.
-```
