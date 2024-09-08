@@ -1,4 +1,6 @@
 # Block Identity Center User
+> [!NOTE]  
+> Using an SCP like the one from [this](https://docs.aws.amazon.com/singlesignon/latest/userguide/prereqs-revoking-user-permissions.html) AWS article might be easier than the Inline Policies approach that is automated here.
 ## Overview
 One of the containment steps defined by [AWS in the playbook to respond against compromised IAM Credentials](https://github.com/aws-samples/aws-customer-playbook-framework/blob/main/docs/Compromised_IAM_Credentials.md#containment) from a user from Identity Center is to revoke role sessions.
 
